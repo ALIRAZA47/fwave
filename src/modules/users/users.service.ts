@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -38,6 +39,9 @@ export class UsersService {
   }
 
   async findOne(id: number) {
+    if (!id) {
+      throw new BadRequestException('Id is required');
+    }
     const user = await this.userRepo.findOne({
       where: {
         id,

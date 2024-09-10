@@ -26,19 +26,24 @@ export class BooksService {
     }
   }
 
-  findAll() {
-    return `This action returns all books`;
+  async findAll() {
+    return await this.bookRepo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} book`;
+  async findOne(id: number) {
+    console.log(id);
+    return await this.bookRepo.findOne({
+      where: {
+        id,
+      },
+    });
   }
 
   update(id: number, updateBookDto: UpdateBookDto) {
     return `This action updates a #${id} book`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} book`;
+  async remove(id: number) {
+    return await this.bookRepo.delete(id);
   }
 }

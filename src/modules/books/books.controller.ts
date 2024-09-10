@@ -5,6 +5,7 @@ import {
   Get,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -30,22 +31,30 @@ export class BooksController {
   }
 
   @Get()
-  findAll() {
-    return this.booksService.findAll();
+  async findAll() {
+    return new GlobalResponseDto(
+      HttpStatus.OK,
+      'Get all books',
+      await this.booksService.findAll(),
+    );
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.booksService.findOne(+id);
+  findOne(@Param('id', new ParseIntPipe()) id: number) {
+    return new GlobalResponseDto(
+      HttpStatus.OK,
+      'Get book',
+      this.booksService.findOne(id),
+    );
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.booksService.update(+id, updateBookDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.booksService.remove(+id);
-  }
+  //
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
+  //   return this.booksService.update(+id, updateBookDto);
+  // }
+  //
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.booksService.remove(+id);
+  // }
 }
